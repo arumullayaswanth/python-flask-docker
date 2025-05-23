@@ -2,7 +2,7 @@
 
 This is a simple Python Flask application that prints the **hostname** and **IP address** of the container it's running in.
 
-## 🐳 Part 1: Dockerized Flask App on EC2
+## 🐳 Part 1:  EC2
 
 ### 📦 Prerequisites
 
