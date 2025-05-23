@@ -84,12 +84,61 @@ kill -9 <PID>
 ```
 
 ---
+# 🚀 Python Flask App in Docker on AWS EC2
 
-## 📦 Dockerize the App
+This guide walks you through setting up a Python Flask app inside a Docker container on an AWS EC2 instance.
 
-### 1. Dockerfile (already present)
+---
 
-Make sure you have this `Dockerfile`:
+## 📦 Prerequisites
+
+* AWS EC2 instance (Amazon Linux 2 or similar)
+* Security group allowing inbound traffic on **port 5000**
+* SSH access to EC2 instance
+
+---
+
+## 🧰 Step-by-Step Setup
+
+### 1. ✅ Install System Dependencies
+
+```bash
+sudo yum update -y
+sudo yum install git -y
+sudo yum install python3-pip -y
+```
+
+### 2. 🔄 Clone the GitHub Repository
+
+```bash
+git clone https://github.com/arumullayaswanth/python-flask-docker.git
+cd python-flask-docker
+```
+
+### 3. 📦 Install Python Dependencies
+
+```bash
+pip3 install -r requirements.txt
+```
+
+### 4. 🐳 Install and Enable Docker
+
+```bash
+sudo yum install docker -y
+sudo systemctl start docker
+sudo systemctl enable docker
+sudo systemctl status docker
+```
+
+If
+
+---
+
+## 🐋 Dockerize the Application
+
+### 5. 📄 Dockerfile (should already exist)
+
+Ensure the file has the following content:
 
 ```Dockerfile
 FROM python:3.13-alpine
@@ -102,19 +151,48 @@ ENTRYPOINT ["python"]
 CMD ["src/app.py"]
 ```
 
-### 2. Build Docker Image
+### 6. 🏗️ Build Docker Image
 
 ```bash
 docker build -t flask-docker-app .
+docker images
 ```
 
-### 3. Run Docker Container
+### 7. 🚀 Run the Docker Container
 
 ```bash
 docker run -d -p 5000:5000 flask-docker-app
+docker ps
 ```
 
-> ✅ Open your browser: `http://<EC2-IP>:5000`
+### 8. ✅ Verify
+
+Open your browser and visit:
+
+```
+http://<your-ec2-public-ip>:5000
+```
+
+---
+
+## 🧼 Useful Docker Commands
+
+```bash
+# List running containers
+docker ps
+
+# List all containers
+docker ps -a
+
+# Stop a container
+docker stop <container-id>
+
+# Kill a container
+docker kill <container-id>
+
+# Remove stopped containers
+docker container prune
+```
 
 ---
 
