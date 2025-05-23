@@ -1,1 +1,163 @@
-123
+# Python Flask App with Docker on EC2 & AWS Lambda (Optional)
+
+This is a simple Python Flask application that prints the **hostname** and **IP address** of the container it's running in.
+
+## 🐳 Part 1: Dockerized Flask App on EC2
+
+### 📦 Prerequisites
+
+* AWS EC2 instance (Amazon Linux 2 or similar)
+* Docker installed (or install via `sudo yum install docker -y`)
+* Python 3 & pip3 installed
+* Git installed (`yum install git -y`)
+
+---
+
+## 🚀 Setup on EC2
+
+### 1. Install Git
+
+```bash
+sudo yum install git -y
+```
+
+### 2. Clone the Repository
+
+```bash
+git clone https://github.com/arumullayaswanth/python-flask-docker.git
+cd python-flask-docker
+```
+
+### 3. Install Python3 and pip
+
+```bash
+sudo yum install python3 -y
+sudo yum install python3-pip -y
+```
+
+### 4. Install Flask Requirements
+
+```bash
+pip3 install -r requirements.txt
+```
+
+### 5. Navigate to App Directory
+
+```bash
+cd src/
+ls
+```
+
+### 6. Run the App
+
+```bash
+python3 app.py
+```
+
+> 🔍 To check running processes:
+
+```bash
+ps aux | grep python
+```
+
+---
+
+## 🌀 Run App in Background with `nohup`
+
+`nohup` allows your app to continue running even after terminal disconnect:
+
+```bash
+nohup python3 app.py > flask.log 2>&1 &
+```
+
+> 💪 Check logs:
+
+```bash
+tail -f flask.log
+```
+
+> ❗ If port 5000 is in use:
+
+```bash
+lsof -i :5000
+kill -9 <PID>
+```
+
+---
+
+## 📦 Dockerize the App
+
+### 1. Dockerfile (already present)
+
+Make sure you have this `Dockerfile`:
+
+```Dockerfile
+FROM python:3.8-slim
+WORKDIR /app
+COPY requirements.txt requirements.txt
+RUN pip install -r requirements.txt
+COPY . .
+CMD ["python", "app.py"]
+```
+
+### 2. Build Docker Image
+
+```bash
+docker build -t flask-docker-app .
+```
+
+### 3. Run Docker Container
+
+```bash
+docker run -d -p 5000:5000 flask-docker-app
+```
+
+> ✅ Open your browser: `http://<EC2-IP>:5000`
+
+---
+
+## ☁️ AWS Lambda (Optional Version)
+
+You **can’t run Flask directly** on Lambda, but here’s what you can do:
+
+### ✅ If you need API-like behavior in Lambda:
+
+* Use **AWS Lambda + API Gateway** instead of Flask.
+* Convert Flask logic into a Lambda-compatible handler:
+
+```python
+import json
+import socket
+
+def lambda_handler(event, context):
+    return {
+        'statusCode': 200,
+        'body': json.dumps({
+            'hostname': socket.gethostname(),
+            'ip': socket.gethostbyname(socket.gethostname())
+        })
+    }
+```
+
+### 🛠️ Package and Deploy
+
+1. Create a zip package of your code.
+2. Deploy it to Lambda.
+3. Use API Gateway to trigger it.
+
+---
+
+## �� Clean Up
+
+```bash
+ps aux | grep python
+kill -9 <PID>  # If needed
+docker ps
+docker stop <container_id>
+```
+
+---
+
+## 🙌 Done!
+
+Your Flask app is now running in Docker on EC2, and optionally portable to Lambda.
