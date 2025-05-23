@@ -7,13 +7,10 @@ This is a simple Python Flask application that prints the **hostname** and **IP 
 ### 📦 Prerequisites
 
 * AWS EC2 instance (Amazon Linux 2 or similar)
-* Docker installed (or install via `sudo yum install docker -y`)
-* Python 3 & pip3 installed
-* Git installed (`yum install git -y`)
 
 ---
 
-## 🚀 Setup on EC2
+## 🚀 Setup  Python Flask App with EC2
 
 ### 1. Install Git
 
