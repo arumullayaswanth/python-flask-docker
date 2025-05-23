@@ -92,12 +92,14 @@ kill -9 <PID>
 Make sure you have this `Dockerfile`:
 
 ```Dockerfile
-FROM python:3.8-slim
+FROM python:3.13-alpine
+LABEL maintainer="yaswanth@gmail.com"
+COPY . /app
 WORKDIR /app
-COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
-COPY . .
-CMD ["python", "app.py"]
+EXPOSE 5000
+ENTRYPOINT ["python"]
+CMD ["src/app.py"]
 ```
 
 ### 2. Build Docker Image
